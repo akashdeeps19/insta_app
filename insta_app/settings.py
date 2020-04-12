@@ -83,6 +83,7 @@ LOGOUT_REDIRECT_URL = 'login'
 WSGI_APPLICATION = 'insta_app.wsgi.application'
 
 
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -115,6 +116,19 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
+
+# settings.py
+
+#[...]
+
+# add this code
+SOCIAL_AUTH_INSTAGRAM_KEY = '2651264628452014'      
+SOCIAL_AUTH_INSTAGRAM_SECRET = '69caad94f800eac62357bc5783b164c6'
+
+SOCIAL_AUTH_INSTAGRAM_EXTRA_DATA = [         ('user', 'user'),
+]
+
+#[...]
 
 LANGUAGE_CODE = 'en-us'
 

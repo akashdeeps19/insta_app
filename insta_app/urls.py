@@ -23,6 +23,8 @@ urlpatterns = [
     path("login/", views.login, name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path('social-auth/', include('social_django.urls', namespace="social")),
+    path('insta-login/',views.insta,name="insta-login"),
+    path('auth/insta/',views.grant_access),
     path("", views.home, name="home"),
 ]
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
+from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 def login(request):
   return render(request, 'login.html')
@@ -9,3 +9,27 @@ def login(request):
 def home(request):
   return render(request, 'home.html')
 
+
+REQUEST_ACCESS = "https://api.instagram.com/oauth/access_token/?"
+def grant_access(request):
+    code = request.GET.get('code')
+    payload = {'client_id': CLIENT_ID, 'client_secret':CLIENT_SECRET, 'grant_type':'authorization_code','redirect_uri': REDIRECT_URI, 'code': code}
+    resp = requests.post(REQUEST_ACCESS, data= payload)
+    response = json.loads(resp.text)
+
+def insta(request):
+	# https://www.instagram.com/oauth/authorize?client_id=2651264628452014&redirect_uri=https://localhost:8000/auth/insta&scope=user_profile,user_media&response_type=code
+	BASE_URL = "https://www.instagram.com/oauth/authorize/?"
+	REDIRECT_URI = "https://localhost:8000/auth/insta"
+	url = BASE_URL + "client_id={}&redirect_uri={}&scope=user_profile,user_media&response_type=code".format('2651264628452014',REDIRECT_URI)
+	print(url)
+	return HttpResponseRedirect(url)
+
+REQUEST_ACCESS = "https://api.instagram.com/oauth/access_token/?"
+REDIRECT_URI = "https://localhost:8000/auth/insta"
+def grant_access(request):
+	print("something")
+	code = request.GET.get('code')
+	payload = {'client_id': '2651264628452014', 'client_secret':'69caad94f800eac62357bc5783b164c6', 'grant_type':'authorization_code','redirect_uri': REDIRECT_URI, 'code': code}
+	resp = requests.post(REQUEST_ACCESS, data= payload)
+	response = json.loads(resp.text)
