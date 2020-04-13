@@ -8,7 +8,7 @@ user_dictionary={}
 def login(request):
   return render(request, 'login.html')
 
-
+@ login_required
 def home(request):
 	print(user_dictionary,"insideee")
 	return render(request, 'home.html', context=user_dictionary)
@@ -31,10 +31,21 @@ def insta(request):
 
 REQUEST_ACCESS = "https://api.instagram.com/oauth/access_token/?"
 REDIRECT_URI = "https://localhost:8000/auth/insta"
+
+import os
+def env_var(key, default=None):
+    """Retrieves env vars and makes Python boolean replacements"""
+    val = os.environ.get(key, default)
+    if val == 'True':
+        val = True
+    elif val == 'False':
+        val = False
+    return val
+
 def grant_access(request):
     print("something")
     code = request.GET.get('code')
-    payload = {'client_id': '2651264628452014', 'client_secret':'69caad94f800eac62357bc5783b164c6', 'grant_type':'authorization_code','redirect_uri': REDIRECT_URI, 'code': code}
+    payload = {'client_id': env_var('INSTAGRAM_KEY') , 'client_secret':env_var('INSTAGRAM_SECRET')  , 'grant_type':'authorization_code','redirect_uri': REDIRECT_URI, 'code': code}
     resp = requests.post(REQUEST_ACCESS, data= payload)
     response = json.loads(resp.text) 
     # print(response['user_id'],resp['access_token'],"Thisssss")

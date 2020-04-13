@@ -12,6 +12,15 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+def env_var(key, default=None):
+    """Retrieves env vars and makes Python boolean replacements"""
+    val = os.environ.get(key, default)
+    if val == 'True':
+        val = True
+    elif val == 'False':
+        val = False
+    return val
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -123,8 +132,8 @@ AUTH_PASSWORD_VALIDATORS = [
 #[...]
 
 # add this code
-SOCIAL_AUTH_INSTAGRAM_KEY = '2651264628452014'      
-SOCIAL_AUTH_INSTAGRAM_SECRET = '69caad94f800eac62357bc5783b164c6'
+SOCIAL_AUTH_INSTAGRAM_KEY =   env_var('INSTAGRAM_KEY')   
+SOCIAL_AUTH_INSTAGRAM_SECRET = env_var('INSTAGRAM_SECRET')  
 
 SOCIAL_AUTH_INSTAGRAM_EXTRA_DATA = [         ('user', 'user'),
 ]
