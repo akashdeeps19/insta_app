@@ -14,13 +14,6 @@ def home(request):
 	return render(request, 'home.html', context=user_dictionary)
 
 
-REQUEST_ACCESS = "https://api.instagram.com/oauth/access_token/?"
-def grant_access(request):
-    code = request.GET.get('code')
-    payload = {'client_id': CLIENT_ID, 'client_secret':CLIENT_SECRET, 'grant_type':'authorization_code','redirect_uri': REDIRECT_URI, 'code': code}
-    resp = requests.post(REQUEST_ACCESS, data= payload)
-    response = json.loads(resp.text)
-
 def insta(request):
 	# https://www.instagram.com/oauth/authorize?client_id=2651264628452014&redirect_uri=https://localhost:8000/auth/insta&scope=user_profile,user_media&response_type=code
 	BASE_URL = "https://www.instagram.com/oauth/authorize/?"
@@ -42,6 +35,7 @@ def env_var(key, default=None):
         val = False
     return val
 
+@ login_required
 def grant_access(request):
     print("something")
     code = request.GET.get('code')
