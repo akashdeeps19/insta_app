@@ -1,1 +1,1 @@
-Run using python migrate.py runsslserver
+Run using python manage.py runsslserver
