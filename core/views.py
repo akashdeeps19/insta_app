@@ -1,13 +1,17 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
+import requests,json
+
+user_dictionary={}
 # Create your views here.
 def login(request):
   return render(request, 'login.html')
 
-@login_required
+
 def home(request):
-  return render(request, 'home.html')
+	print(user_dictionary,"insideee")
+	return render(request, 'home.html', context=user_dictionary)
 
 
 REQUEST_ACCESS = "https://api.instagram.com/oauth/access_token/?"
@@ -32,4 +36,18 @@ def grant_access(request):
 	code = request.GET.get('code')
 	payload = {'client_id': '2651264628452014', 'client_secret':'69caad94f800eac62357bc5783b164c6', 'grant_type':'authorization_code','redirect_uri': REDIRECT_URI, 'code': code}
 	resp = requests.post(REQUEST_ACCESS, data= payload)
-	response = json.loads(resp.text)
+	response = json.loads(resp.text) 
+	# print(response['user_id'],resp['access_token'],"Thisssss")
+	# print(response)
+	url=('https://graph.instagram.com/{}?fields=id,username&access_token={}').format(response['user_id'],response['access_token'])
+	# print( HttpResponseRedirect(url))
+	resp=requests.get(url)
+	user_dictionary = json.loads(resp.text) 
+	print(user_dictionary)
+	# return HttpResponseRedirect("https://localhost:8000/")
+	return render(request,'home.html',context=user_dictionary)
+
+    
+	# return HttpResponseRedirect(url)
+
+	# return HttpResponse(response)
