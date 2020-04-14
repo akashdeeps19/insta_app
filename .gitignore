@@ -1,1 +1,3 @@
 .vscode/
+.env
+insta_app/__pycache__
