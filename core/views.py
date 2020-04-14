@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 import requests,json
+from django.urls import reverse
 
 user_dictionary={}
 # Create your views here.
@@ -13,6 +14,13 @@ def home(request):
 	print(user_dictionary,"insideee")
 	return render(request, 'home.html', context=user_dictionary)
 
+
+REQUEST_ACCESS = "https://api.instagram.com/oauth/access_token/?"
+# def grant_access(request):
+#     code = request.GET.get('code')
+#     payload = {'client_id': CLIENT_ID, 'client_secret':CLIENT_SECRET, 'grant_type':'authorization_code','redirect_uri': REDIRECT_URI, 'code': code}
+#     resp = requests.post(REQUEST_ACCESS, data= payload)
+#     response = json.loads(resp.text)
 
 def insta(request):
 	# https://www.instagram.com/oauth/authorize?client_id=2651264628452014&redirect_uri=https://localhost:8000/auth/insta&scope=user_profile,user_media&response_type=code
@@ -35,7 +43,7 @@ def env_var(key, default=None):
         val = False
     return val
 
-@ login_required
+
 def grant_access(request):
     print("something")
     code = request.GET.get('code')
@@ -43,7 +51,12 @@ def grant_access(request):
     resp = requests.post(REQUEST_ACCESS, data= payload)
     response = json.loads(resp.text) 
     # print(response['user_id'],resp['access_token'],"Thisssss")
-    # print(response)
+    print(response)
+    # 'code': 400
+    if 'code' in response.keys():
+    	if(response['code']==400):
+    		print("redirecting")
+    		return HttpResponseRedirect(reverse('login'))
     url=('https://graph.instagram.com/{}?fields=id,username&access_token={}').format(response['user_id'],response['access_token'])
     # print( HttpResponseRedirect(url))
     resp=requests.get(url)
